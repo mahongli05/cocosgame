@@ -8,6 +8,7 @@
 #include "cocos2d.h"
 #include "MessageReceiver.h"
 #include "MapHelper.h"
+#include "Hero.h"
 
 using namespace cocos2d;
 
@@ -21,11 +22,16 @@ public:
     virtual Sprite* getSpriteInPosition(Vec2 point);
     virtual Size getMapContentSize();
 
+    Hero* getHero();
+
+    void updatePercent(int percent);
+
     int TileMapPosToTileType(Point HeroPos, float fMapMove);
 
 protected:
     virtual bool init();
     virtual void onMsgReceive(int enMsg, void *pData, int nSize);
+    bool onContactBegin(PhysicsContact& contact);
 
 private:
     void heroMove(float dt);
@@ -36,6 +42,11 @@ private:
 
     float mMapMoveStartPosition;
     float mMapMoveEndPosition;
+    float mMapScale;
+
+    int mPercent;
+
+    Hero* mHero;
 };
 
 

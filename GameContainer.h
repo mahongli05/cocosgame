@@ -6,6 +6,8 @@
 #define PROJ_ANDROID_STUDIO_GAMECONTAINER_H
 
 #include "cocos2d.h"
+#include "Hero.h"
+#include "GameMap.h"
 
 using namespace cocos2d;
 
@@ -25,7 +27,11 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameContainer);
 
+    void updateHeroSpeed(int percent);
+
 private:
+
+    GameMap* mGameMap;
 };
 
 

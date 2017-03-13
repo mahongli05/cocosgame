@@ -3,7 +3,6 @@
 //
 
 #include "GameContainer.h"
-#include "GameMap.h"
 
 const int TAG_GAME_MAP = 99;
 
@@ -13,6 +12,7 @@ GameContainer *GameContainer::createContainer(int level) {
     GameMap * gameMap = GameMap::createGameMap("game3.tmx");
     gameMap->setAnchorPoint(Vec2(0, 0));
     container->addChild(gameMap, 0, TAG_GAME_MAP);
+    container->mGameMap = gameMap;
     return container;
 }
 
@@ -43,8 +43,16 @@ void GameContainer::onFrameUpdate(float dt) {
         //CCLog("HeroPosX=%f    HeroPosY=%f",pHero->getPositionX(),pHero->getPositionY());
         return;
     } while (false);
-    CCLog("fun GameContainer::Update Error!");
+//    CCLog("fun GameContainer::Update Error!");
 }
+
+void GameContainer::updateHeroSpeed(int percent) {
+    if (mGameMap != NULL) {
+        mGameMap->updatePercent(percent);
+    }
+}
+
+
 
 
 

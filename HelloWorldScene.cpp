@@ -1,16 +1,20 @@
 #include "HelloWorldScene.h"
-#include "SimpleAudioEngine.h"
-#include "GameContainer.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
+
+using namespace ui;
 
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
+    auto scene = Scene::createWithPhysics();
+
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setGravity(Point(0, -200));
+
     // 'layer' is an autorelease object
-//    auto layer = HelloWorld::create();
+    auto helloWord = HelloWorld::create();
 
     auto layer = GameContainer::createContainer(0);
     Size winSize = Director::getInstance()->getWinSize();
@@ -19,7 +23,23 @@ Scene* HelloWorld::createScene()
     layer->setScale(scale);
     layer->setAnchorPoint(Vec2(0, 0));
     // add layer as a child to scene
-    scene->addChild(layer);
+    scene->addChild(layer, 3);
+    layer->startGame();
+
+    helloWord->mGameContainer = layer;
+
+    Slider * slider = Slider::create();
+    slider->loadBarTexture("bg_precent.png");
+    slider->loadProgressBarTexture("precent.png");
+    slider->loadSlidBallTextures("CloseNormal.png");
+    slider->setAnchorPoint(Point(0, 0));
+    slider->setPosition(Point(0, winSize.height-slider->getContentSize().height));
+    slider->setMaxPercent(100);
+    slider->setPercent(0);
+    slider->addEventListener(CC_CALLBACK_2(HelloWorld::sliderEvent, helloWord));
+    scene->addChild(slider, 4);
+
+    scene->addChild(helloWord);
 
     // return the scene
     return scene;
@@ -34,7 +54,7 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -47,7 +67,7 @@ bool HelloWorld::init()
                                            "CloseNormal.png",
                                            "CloseSelected.png",
                                            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
+
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
@@ -61,9 +81,9 @@ bool HelloWorld::init()
 
     // add a label shows "Hello World"
     // create and initialize a label
-    
+
     auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
+
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
                             origin.y + visibleSize.height - label->getContentSize().height));
@@ -79,7 +99,7 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
-    
+
     return true;
 }
 
@@ -92,11 +112,21 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
-    
+
     /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
-    
+
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
-    
-    
+
+
 }
+
+void HelloWorld::sliderEvent(cocos2d::Ref *sender, cocos2d::ui::Slider::EventType eventType) {
+//    if (eventType == cocos2d::ui::Slider::EventType::ON_PERCENTAGE_CHANGED) {
+        Slider* slider = dynamic_cast<Slider*>(sender);
+        int percent = slider->getPercent();
+        mGameContainer->updateHeroSpeed(percent);
+//    }
+}
+
+

@@ -29,6 +29,8 @@ public:
 
     virtual bool init();
 
+    void updateSpeed(int percent);
+
     void onMove(float dt, bool toRight);
 
     void onJump(float dt);
