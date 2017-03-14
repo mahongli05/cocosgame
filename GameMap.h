@@ -9,6 +9,7 @@
 #include "MessageReceiver.h"
 #include "MapHelper.h"
 #include "Hero.h"
+#include "Enemy.h"
 
 using namespace cocos2d;
 
@@ -22,11 +23,7 @@ public:
     virtual Sprite* getSpriteInPosition(Vec2 point);
     virtual Size getMapContentSize();
 
-    Hero* getHero();
-
     void updatePercent(int percent);
-
-    int TileMapPosToTileType(Point HeroPos, float fMapMove);
 
 protected:
     virtual bool init();
@@ -34,19 +31,27 @@ protected:
     bool onContactBegin(PhysicsContact& contact);
 
 private:
-    void heroMove(float dt);
 
-    bool mLeftKeyDown;
-    bool mRightKeyDown;
-    bool mJumKeyDown;
+    GameMap();
+    ~GameMap();
 
     float mMapMoveStartPosition;
     float mMapMoveEndPosition;
+    float mMapVisibleWidth;
     float mMapScale;
+
+    float mHorizontalVelocity;
+    float mVerticalVelocity;
 
     int mPercent;
 
     Hero* mHero;
+    Vector<Enemy*> mEnemyVector;
+
+    void onHeroDied();
+    void onEnemyDied(Node* nodeA, Node* nodeB);
+
+    void loadObjects();
 };
 
 

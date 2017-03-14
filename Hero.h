@@ -12,11 +12,27 @@
 
 using namespace cocos2d;
 
+enum State {
+    STATE_NONE,
+    STATE_NORMAL,
+    STATE_RUN_RIGHT,
+    STATE_JUMP,
+    STATE_DIE
+};
+
 class Hero : public Sprite, public MessageSender {
 
 private:
     MessageReceiver* mMessageReceiver;
     MapHelper* mMapHelper;
+
+    SpriteFrame * mJumpFrame;
+    SpriteFrame * mNormalFrame;
+
+    Action* mMoveRightAction;
+    Action* mDieAction;
+
+    State mState;
 
 public:
 
@@ -30,12 +46,8 @@ public:
     virtual bool init();
 
     void updateSpeed(int percent);
-
-    void onMove(float dt, bool toRight);
-
-    void onJump(float dt);
-
-    void onStop(float dt);
+    void updateState(State state);
+    State getState();
 };
 
 

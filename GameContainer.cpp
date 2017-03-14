@@ -9,7 +9,7 @@ const int TAG_GAME_MAP = 99;
 GameContainer *GameContainer::createContainer(int level) {
 
     GameContainer * container = GameContainer::create();
-    GameMap * gameMap = GameMap::createGameMap("game3.tmx");
+    GameMap * gameMap = GameMap::createGameMap("game4.tmx");
     gameMap->setAnchorPoint(Vec2(0, 0));
     container->addChild(gameMap, 0, TAG_GAME_MAP);
     container->mGameMap = gameMap;

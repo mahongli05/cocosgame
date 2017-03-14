@@ -12,7 +12,7 @@ AppDelegate::AppDelegate()
 {
 }
 
-AppDelegate::~AppDelegate() 
+AppDelegate::~AppDelegate()
 {
 }
 
@@ -26,7 +26,7 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// if you want to use the package manager to install more packages,  
+// if you want to use the package manager to install more packages,
 // don't modify or remove this function
 static int register_all_packages()
 {
@@ -52,7 +52,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
 
-    glview->setDesignResolutionSize(800, 400, ResolutionPolicy::SHOW_ALL);
+    glview->setDesignResolutionSize(800, 400, ResolutionPolicy::EXACT_FIT);
 //    // Set the design resolution
 //    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
 //    auto frameSize = glview->getFrameSize();

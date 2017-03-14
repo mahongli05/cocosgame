@@ -11,7 +11,7 @@ Scene* HelloWorld::createScene()
     auto scene = Scene::createWithPhysics();
 
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    scene->getPhysicsWorld()->setGravity(Point(0, -200));
+    scene->getPhysicsWorld()->setGravity(Point(0, -500));
 
     // 'layer' is an autorelease object
     auto helloWord = HelloWorld::create();
