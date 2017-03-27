@@ -12,29 +12,51 @@ static const int TRAP_CATEGORY_MASK = 0x08;
 static const int WIN_CATEGORY_MASK = 0x10;
 static const int BOX_CATEGORY_MASK = 0x20;
 
-static const int DROP_CATEGORY_MASK = 0x100;
+static const int BULLET_H_CATEGORY_MASK = 0x40;
+static const int BULLET_E_CATEGORY_MASK = 0x80;
+
+// control
+static const int BORN_CATEGORY_MASK = 0x100;
+
+static const int DROP_CATEGORY_MASK = 0x200;
 
 static const int HERO_COLLECTION_MASK = ENEMY_CATEGORY_MASK | LAND_CATEGORY_MASK
                                         | TRAP_CATEGORY_MASK | WIN_CATEGORY_MASK
-                                        | BOX_CATEGORY_MASK;
+                                        | BOX_CATEGORY_MASK | BULLET_E_CATEGORY_MASK;
 
 static const int HERO_CONTACT_TEST_MASK = HERO_COLLECTION_MASK;
 
-static const int ENEMY_COLLECTION_MASK = HERO_COLLECTION_MASK | HERO_CATEGORY_MASK;
-static const int ENEMY_CONTACT_TEST_MASK = HERO_COLLECTION_MASK | HERO_CATEGORY_MASK;
+// 出生时对子弹和怪物免疫
+static const int BORN_COLLECTION_MASK = LAND_CATEGORY_MASK | TRAP_CATEGORY_MASK
+                                        | WIN_CATEGORY_MASK | BOX_CATEGORY_MASK ;
 
-static const int LAND_COLLECTION_MASK = HERO_CATEGORY_MASK | ENEMY_CATEGORY_MASK;
+static const int BORN_CONTACT_TEST_MASK = BORN_COLLECTION_MASK;
+
+static const int ENEMY_COLLECTION_MASK =  ENEMY_CATEGORY_MASK | LAND_CATEGORY_MASK
+                                          | TRAP_CATEGORY_MASK | BOX_CATEGORY_MASK
+                                          | BULLET_H_CATEGORY_MASK | HERO_CATEGORY_MASK;
+
+static const int ENEMY_CONTACT_TEST_MASK = ENEMY_COLLECTION_MASK;
+
+static const int LAND_COLLECTION_MASK = HERO_CATEGORY_MASK | ENEMY_CATEGORY_MASK | WIN_CATEGORY_MASK;
 static const int LAND_CONTACT_TEST_MASK = HERO_CATEGORY_MASK;
 
 static const int TRAP_COLLECTION_MASK = HERO_CATEGORY_MASK | ENEMY_CATEGORY_MASK;
 static const int TRAP_CONTACT_TEST_MASK = HERO_CATEGORY_MASK | ENEMY_CATEGORY_MASK;
 
-static const int WIN_COLLECTION_MASK = HERO_CATEGORY_MASK;
+static const int WIN_COLLECTION_MASK = HERO_CATEGORY_MASK | LAND_CATEGORY_MASK;
 static const int WIN_CONTACT_TEST_MASK = HERO_CATEGORY_MASK;
 
 static const int BOX_COLLECTION_MASK = HERO_CATEGORY_MASK;
 static const int BOX_CONTACT_TEST_MASK = 0;
 
+// just contact with enemy, dismiss when contact box
+static const int BULLET_H_COLLECTION_MASK = ENEMY_CATEGORY_MASK | BOX_CATEGORY_MASK;
+static const int BULLET_H_CONTACT_TEST_MASK = BULLET_H_COLLECTION_MASK;
+
+// just contact with hero, dismiss when contact box
+static const int BULLET_E_COLLECTION_MASK = HERO_CATEGORY_MASK | BOX_CATEGORY_MASK;
+static const int BULLET_E_CONTACT_TEST_MASK = BULLET_E_COLLECTION_MASK;
 
 // contact status
 static const int HERO_WIN = HERO_CATEGORY_MASK | WIN_CATEGORY_MASK;
@@ -46,6 +68,18 @@ static const int ENEMY_TRAP = ENEMY_CATEGORY_MASK | TRAP_CATEGORY_MASK;
 static const int ENEMY_LAND = ENEMY_CATEGORY_MASK | LAND_CATEGORY_MASK;
 static const int ENEMY_ENEMY = ENEMY_CATEGORY_MASK;
 
+static const int BULLET_E_HERO = BULLET_E_CATEGORY_MASK | HERO_CATEGORY_MASK;
+static const int BULLET_E_BOX = BULLET_E_CATEGORY_MASK | BOX_CATEGORY_MASK;
+
+static const int BULLET_H_ENEMY = BULLET_H_CATEGORY_MASK | ENEMY_CATEGORY_MASK;
+static const int BULLET_H_BOX = BULLET_H_CATEGORY_MASK | BOX_CATEGORY_MASK;
+
+// land flag
+static const int STATIC_LAND = 1;
+static const int FLOAT_LAND_MOVE = 2;
+static const int FLOAT_LAND_DROP = 3;
+
+// action flag
 
 class PhysicsConfig {
 

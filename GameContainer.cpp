@@ -9,10 +9,7 @@ const int TAG_GAME_MAP = 99;
 GameContainer *GameContainer::createContainer(int level) {
 
     GameContainer * container = GameContainer::create();
-    GameMap * gameMap = GameMap::createGameMap("game4.tmx");
-    gameMap->setAnchorPoint(Vec2(0, 0));
-    container->addChild(gameMap, 0, TAG_GAME_MAP);
-    container->mGameMap = gameMap;
+    container->loadMap(level);
     return container;
 }
 
@@ -46,11 +43,58 @@ void GameContainer::onFrameUpdate(float dt) {
 //    CCLog("fun GameContainer::Update Error!");
 }
 
-void GameContainer::updateHeroSpeed(int percent) {
+GameContainer::GameContainer() {
+    mGameMap = NULL;
+    mCurrentLevel = 0;
+}
+
+GameContainer::~GameContainer() {
+    mGameMap = NULL;
+}
+
+GameMap *GameContainer::getGameMap() {
+    return mGameMap;
+}
+
+bool GameContainer::loadMap(int level) {
     if (mGameMap != NULL) {
-        mGameMap->updatePercent(percent);
+        removeChild(mGameMap);
+    }
+    GameMap * gameMap = GameMap::createGameMap("game5.tmx");
+    if (gameMap != nullptr) {
+        gameMap->setAnchorPoint(Vec2(0, 0));
+        gameMap->setGameEventCallback(mGameEventCallback);
+        addChild(gameMap, 0, TAG_GAME_MAP);
+        setPosition(Point(0, 0));
+        mGameMap = gameMap;
+        mCurrentLevel = level;
+        return true;
+    }
+    return false;
+}
+
+int GameContainer::getCurrentLevel() {
+    return mCurrentLevel;
+}
+
+void GameContainer::setGameEventCallback(GameEventCallback *callback) {
+    mGameEventCallback = callback;
+    if (mGameMap != nullptr) {
+        mGameMap->setGameEventCallback(callback);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,48 +6,54 @@
 #define PROJ_ANDROID_STUDIO_HERO_H
 
 #include "cocos2d.h"
-#include "MessageSender.h"
-#include "MessageReceiver.h"
 #include "MapHelper.h"
 
 using namespace cocos2d;
 
-enum State {
-    STATE_NONE,
-    STATE_NORMAL,
-    STATE_RUN_RIGHT,
-    STATE_JUMP,
-    STATE_DIE
-};
+//enum State {
+//    STATE_NONE,
+//    STATE_NORMAL,
+//    STATE_RUN_RIGHT,
+//    STATE_JUMP,
+//    STATE_DIE
+//};
 
-class Hero : public Sprite, public MessageSender {
+class Hero : public Sprite {
 
 private:
-    MessageReceiver* mMessageReceiver;
     MapHelper* mMapHelper;
 
     SpriteFrame * mJumpFrame;
     SpriteFrame * mNormalFrame;
+    SpriteFrame * mCrazyFrame;
+    SpriteFrame * mCrazyJumpFrame;
 
     Action* mMoveRightAction;
+    Action* mCrazyMoveRightAction;
     Action* mDieAction;
 
-    State mState;
+    int mStateFlag;
+    float mCrazyDuration;
 
 public:
 
     Hero();
     ~Hero();
 
-    static Hero* createHero(MessageReceiver *receiver, MapHelper *mapHelper);
+    static Hero* createHero(MapHelper *mapHelper);
 
     CREATE_FUNC(Hero);
 
     virtual bool init();
 
-    void updateSpeed(int percent);
-    void updateState(State state);
-    State getState();
+    void updateSpeed(float xV, float yV);
+    Point getSpeed();
+    void setStateFlag(int flag);
+    int getStateFlag();
+    void setCrazy(float duration); // s
+    void onFrameUpdate(float dt);
+    bool isLive();
+    bool isCrazy();
 };
 
 

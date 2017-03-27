@@ -8,11 +8,18 @@
 Enemy::Enemy() {
     mDieFrame = nullptr;
     mNormalAction = nullptr;
+    mState = ENEMY_INACTIVE;
 }
 
 Enemy::~Enemy() {
-    mDieFrame->release();
-    mNormalAction->release();
+    if (mDieFrame != nullptr) {
+        mDieFrame->release();
+    }
+    mDieFrame = nullptr;
+    if (mNormalAction != nullptr) {
+        mNormalAction->release();
+    }
+    mNormalAction = nullptr;
 }
 
 bool Enemy::init() {
@@ -41,22 +48,74 @@ Enemy *Enemy::createEnemy(std::string &name) {
     body->setCollisionBitmask(ENEMY_COLLECTION_MASK);
     body->setGravityEnable(true);
     // update to true when visible;
-    body->setDynamic(false);
     body->setRotationEnable(false);
     body->setVelocity(Point(-200, 0));
+    body->setDynamic(false);
     enemy->setPhysicsBody(body);
 
     return enemy;
 }
 
+void Enemy::updateState(EnemyState state) {
+    if (state == mState || mState == ENEMY_DIE) {
+        return;
+    }
+    mState = state;
+    switch (state) {
+        case ENEMY_ACTIVE:
+            active();
+            break;
+
+        case ENEMY_DIE:
+            die();
+            break;
+
+        case ENEMY_INACTIVE:
+            inactive();
+            break;
+
+        default:
+            break;
+    }
+}
+
 void Enemy::die() {
-    setSpriteFrame(mDieFrame);
     stopAction(mNormalAction);
-    getPhysicsBody()->setVelocity(Point(0, 50));
-    getPhysicsBody()->setCategoryBitmask(DROP_CATEGORY_MASK);
+    setSpriteFrame(mDieFrame);
+    PhysicsBody * body = getPhysicsBody();
+    if (body != nullptr) {
+        getPhysicsBody()->setVelocity(Point(0, 50));
+        getPhysicsBody()->setCategoryBitmask(DROP_CATEGORY_MASK);
+    }
     // delay remove ?
 //    getParent()->removeChild(this);
 }
+
+void Enemy::active() {
+    PhysicsBody* body = getPhysicsBody();
+    bool isDynamic = body->isDynamic();
+    if (!isDynamic ) {
+        body->setDynamic(true);
+        body->setVelocity(Point(-200, 0));
+    }
+}
+
+void Enemy::inactive() {
+    PhysicsBody* body = getPhysicsBody();
+    if (body != nullptr) {
+        body->setDynamic(false);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

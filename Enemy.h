@@ -9,6 +9,12 @@
 
 using namespace cocos2d;
 
+enum  EnemyState {
+    ENEMY_INACTIVE,
+    ENEMY_ACTIVE,
+    ENEMY_DIE
+};
+
 class Enemy : public Sprite {
 
 public:
@@ -19,7 +25,10 @@ public:
 
     CREATE_FUNC(Enemy);
 
-    void die();
+    void updateState(EnemyState state);
+    virtual void active();
+    virtual void die();
+    virtual void inactive();
 
 protected:
     virtual bool init();
@@ -27,6 +36,7 @@ protected:
 private:
     SpriteFrame* mDieFrame;
     Action* mNormalAction;
+    EnemyState mState;
 };
 
 

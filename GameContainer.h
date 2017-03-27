@@ -16,7 +16,10 @@ class GameContainer : public Layer {
 public:
     static GameContainer* createContainer(int level);
 
+    bool loadMap(int level);
+    void setGameEventCallback(GameEventCallback* callback);
     void startGame();
+    int getCurrentLevel();
 
     void onFrameUpdate(float dt);
 
@@ -27,11 +30,16 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameContainer);
 
-    void updateHeroSpeed(int percent);
+    GameMap* getGameMap();
+
+    GameContainer();
+    ~GameContainer();
 
 private:
 
     GameMap* mGameMap;
+    int mCurrentLevel;
+    GameEventCallback* mGameEventCallback;
 };
 
 
